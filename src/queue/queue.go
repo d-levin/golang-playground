@@ -13,7 +13,7 @@ type (
 )
 
 func New() *Queue {
-	n := &node{next: nil}
+	n := &node{}
 	return &Queue{
 		length: 0,
 		front:  n,
@@ -51,4 +51,11 @@ func (q *Queue) Pop() interface{} {
 	q.front = q.front.next
 
 	return value
+}
+
+func (q *Queue) Empty() {
+	n := &node{}
+	q.length = 0
+	q.front = n
+	q.back = n
 }
