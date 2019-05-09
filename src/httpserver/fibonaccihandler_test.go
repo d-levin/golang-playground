@@ -87,6 +87,30 @@ func Test_FibonacciHandler_GivenValidRequest_ShouldReturnHttpStatus200(t *testin
 	}
 }
 
+func Test_FibonacciHandler_GivenValidRequest_ShouldReturnContentTypeApplicationJson(t *testing.T) {
+	urls := []int{
+		0,
+	}
+
+	for _, n := range urls {
+		req, err := http.NewRequest(http.MethodGet, "?fib="+strconv.Itoa(n), nil)
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		responseRecorder := httptest.NewRecorder()
+		handler := http.HandlerFunc(fibonacciHandler)
+
+		handler.ServeHTTP(responseRecorder, req)
+
+		header := responseRecorder.Header().Get("content-type")
+		if header == "" {
+			t.Error("Expected application/json, got", header)
+		}
+	}
+}
+
 func Test_FibonacciHandler_GivenInvalidRequest_ShouldReturnHttpStatus400(t *testing.T) {
 	urls := []string{
 		"",

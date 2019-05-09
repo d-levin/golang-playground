@@ -2,11 +2,9 @@ package httpserver
 
 import (
 	"encoding/json"
-	"errors"
 	"fibonacci"
 	"net/http"
 	"strconv"
-	"strings"
 )
 
 type response struct {
@@ -24,7 +22,7 @@ func (r response) json() ([]byte, error) {
 }
 
 func fibonacciHandler(w http.ResponseWriter, req *http.Request) {
-	n, err := extractN(req)
+	n, err := strconv.Atoi(req.URL.Query().Get("fib"))
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -38,28 +36,13 @@ func fibonacciHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	w.Header().Add("Content-Type", "application/json")
 	response, err := response{n, result.String()}.json()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
+	w.Header().Add("Content-Type", "application/json")
+
 	_, _ = w.Write(response)
-}
-
-func extractN(req *http.Request) (int, error) {
-	parts := strings.Split(req.URL.RawQuery, "=")
-
-	if len(parts) < 2 || parts[0] != "fib" {
-		return -1, errors.New("invalid param")
-	}
-
-	n, err := strconv.Atoi(parts[1])
-
-	if err != nil {
-		return -1, errors.New("invalid value")
-	}
-
-	return n, nil
 }
