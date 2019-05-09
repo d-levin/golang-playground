@@ -1,61 +1,50 @@
 package stack
 
-import (
-	"errors"
+type (
+	Stack struct {
+		size uint
+		top  *node
+	}
+	node struct {
+		value interface{}
+		prev  *node
+	}
 )
 
-type Stack struct {
-	size uint
-	// TODO use a node instead to avoid worrying about capacity
-	values []interface{}
+func New() *Stack {
+	return &Stack{
+		size: 0,
+		top:  &node{},
+	}
 }
 
-func (s *Stack) resize() {
-	newCapacity := 0
-	if cap(s.values) == 0 {
-		newCapacity = 2
-	} else {
-		newCapacity = cap(s.values) * 2
-	}
-
-	newArray := make([]interface{}, newCapacity)
-
-	for i := range s.values {
-		newArray[i] = (s.values)[i]
-	}
-
-	s.values = newArray
+func (s *Stack) Len() uint {
+	return s.size
 }
 
-func (s *Stack) Push(value interface{}) error {
-	if int(s.size) >= cap(s.values) {
-		s.resize()
-	}
-
-	s.values[s.size] = value
+func (s *Stack) Push(value interface{}) {
 	s.size++
 
-	return nil
+	n := &node{value: value, prev: s.top}
+
+	s.top = n
 }
 
-func (s *Stack) Pop() (interface{}, error) {
+func (s *Stack) Pop() interface{} {
 	if s.size == 0 {
-		return nil, errors.New("stack is empty")
+		return nil
 	}
 
 	s.size--
+	v := s.top.value
+	s.top = s.top.prev
 
-	return s.values[s.size], nil
+	return v
 }
 
-func (s *Stack) Peek() (interface{}, error) {
+func (s *Stack) Peek() interface{} {
 	if s.size == 0 {
-		return nil, errors.New("stack is empty")
+		return nil
 	}
-
-	return s.values[s.size-1], nil
-}
-
-func (s *Stack) Size() uint {
-	return s.size
+	return s.top.value
 }

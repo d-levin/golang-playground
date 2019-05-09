@@ -1,89 +1,67 @@
 package stack
 
-import (
-	"testing"
-)
+import "testing"
 
-func Test_Push_GivenStackIsFull_ShouldResizeByDoubling(t *testing.T) {
-	s := Stack{}
+func Test_Stack(t *testing.T) {
+	s := New()
 
-	if cap(s.values) != 0 {
-		t.Error("Expected capacity 0, got", cap(s.values))
+	if s.Len() != 0 {
+		t.Error("Expected 0, got", s.Len())
 	}
 
-	_ = s.Push(5)
-
-	if cap(s.values) != 2 {
-		t.Error("Expected capacity 2, got", cap(s.values))
+	s.Push(5)
+	peeked := s.Peek().(int)
+	if peeked != 5 {
+		t.Error("Expected 5, got", peeked)
+	}
+	if s.Len() != 1 {
+		t.Error("Expected 1, got", s.Len())
 	}
 
-	println(len(s.values))
-
-	_ = s.Push(5)
-
-	println(len(s.values))
-
-	_ = s.Push(5)
-
-	println(len(s.values))
-}
-
-func Test_Push_GivenStackIsNotFull_ShouldPushElement(t *testing.T) {
-	s := Stack{}
-
-	err := s.Push(5)
-	if err != nil {
-		t.Error("Expected nil, got", err)
+	s.Push(3)
+	peeked = s.Peek().(int)
+	if peeked != 3 {
+		t.Error("Expected 3, got", peeked)
+	}
+	if s.Len() != 2 {
+		t.Error("Expected 2, got", s.Len())
 	}
 
-	err = s.Push(2)
-	if err != nil {
-		t.Error("Expected nil, got", err)
+	s.Push(4)
+	peeked = s.Peek().(int)
+	if peeked != 4 {
+		t.Error("Expected 4, got", peeked)
 	}
-}
-
-func Test_Push_GivenStackIsNotFull_ShouldIncrementSize(t *testing.T) {
-	s := Stack{}
-
-	if s.size != 0 {
-		t.Error("Expected initial size to be 0, got", s.size)
+	if s.Len() != 3 {
+		t.Error("Expected 3, got", s.Len())
 	}
 
-	_ = s.Push(5)
-
-	if s.size != 1 {
-		t.Error("Expected size 1, got", s.size)
+	popped := s.Pop().(int)
+	if popped != 4 {
+		t.Error("Expected 4, got", popped)
 	}
-}
-
-func Test_Pop_GivenStackIsEmpty_ShouldReturnError(t *testing.T) {
-	s := Stack{}
-
-	_, err := s.Pop()
-
-	if err == nil {
-		t.Error("Expected error, got", err)
+	if s.Len() != 2 {
+		t.Error("Expected 2, got", s.Len())
 	}
-}
 
-func Test_Pop_GivenStackIsNotEmpty_ShouldReturnElement(t *testing.T) {
-	s := Stack{}
-
-	_ = s.Push(5)
-
-	value, _ := s.Pop()
-
-	if value != 5 {
-		t.Error("Expected 5, got", value)
+	popped = s.Pop().(int)
+	if popped != 3 {
+		t.Error("Expected 3, got", popped)
 	}
-}
+	if s.Len() != 1 {
+		t.Error("Expected 1, got", s.Len())
+	}
 
-func Test_Peek_GivenStackIsEmpty_ShouldReturnError(t *testing.T) {
-	s := Stack{}
+	popped = s.Pop().(int)
+	if popped != 5 {
+		t.Error("Expected 5, got", popped)
+	}
+	if s.Len() != 0 {
+		t.Error("Expected 0, got", s.Len())
+	}
 
-	_, err := s.Peek()
-
-	if err == nil {
-		t.Error("Expected error, got", err)
+	p := s.Pop()
+	if p != nil {
+		t.Error("Expected nil, got", p)
 	}
 }
