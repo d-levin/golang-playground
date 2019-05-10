@@ -1,8 +1,7 @@
-package httpserver
+package fibonacci
 
 import (
 	"encoding/json"
-	"fibonacci"
 	"net/http"
 	"strconv"
 )
@@ -21,7 +20,13 @@ func (r response) json() ([]byte, error) {
 	)
 }
 
-func fibonacciHandler(w http.ResponseWriter, req *http.Request) {
+func Handler(w http.ResponseWriter, req *http.Request) {
+	if req.Method != http.MethodGet {
+		w.Header().Add("Allow", http.MethodGet)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
 	n, err := strconv.Atoi(req.URL.Query().Get("fib"))
 
 	if err != nil {
@@ -29,7 +34,7 @@ func fibonacciHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	result, err := fibonacci.ComputeNthFibonacci(n)
+	result, err := ComputeNthFibonacci(n)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

@@ -1,4 +1,4 @@
-package httpserver
+package fibonacci
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func Test_FibonacciHandler_GivenValidRequest_ShouldReturnNthFibonacci(t *testing.T) {
+func Test_Handler_GivenValidRequest_ShouldReturnNthFibonacci(t *testing.T) {
 	pairs := []testhelpers.Pair{
 		{0, "0"},
 		{1, "1"},
@@ -35,7 +35,7 @@ func Test_FibonacciHandler_GivenValidRequest_ShouldReturnNthFibonacci(t *testing
 		}
 
 		responseRecorder := httptest.NewRecorder()
-		handler := http.HandlerFunc(fibonacciHandler)
+		handler := http.HandlerFunc(Handler)
 
 		handler.ServeHTTP(responseRecorder, req)
 
@@ -50,7 +50,7 @@ func Test_FibonacciHandler_GivenValidRequest_ShouldReturnNthFibonacci(t *testing
 	}
 }
 
-func Test_FibonacciHandler_GivenValidRequest_ShouldReturnHttpStatus200(t *testing.T) {
+func Test_Handler_GivenValidRequest_ShouldReturnHttpStatus200(t *testing.T) {
 	urls := []int{
 		0,
 		1,
@@ -76,7 +76,7 @@ func Test_FibonacciHandler_GivenValidRequest_ShouldReturnHttpStatus200(t *testin
 		}
 
 		responseRecorder := httptest.NewRecorder()
-		handler := http.HandlerFunc(fibonacciHandler)
+		handler := http.HandlerFunc(Handler)
 
 		handler.ServeHTTP(responseRecorder, req)
 
@@ -87,7 +87,7 @@ func Test_FibonacciHandler_GivenValidRequest_ShouldReturnHttpStatus200(t *testin
 	}
 }
 
-func Test_FibonacciHandler_GivenValidRequest_ShouldReturnContentTypeApplicationJson(t *testing.T) {
+func Test_Handler_GivenValidRequest_ShouldReturnContentTypeApplicationJson(t *testing.T) {
 	urls := []int{
 		0,
 	}
@@ -100,7 +100,7 @@ func Test_FibonacciHandler_GivenValidRequest_ShouldReturnContentTypeApplicationJ
 		}
 
 		responseRecorder := httptest.NewRecorder()
-		handler := http.HandlerFunc(fibonacciHandler)
+		handler := http.HandlerFunc(Handler)
 
 		handler.ServeHTTP(responseRecorder, req)
 
@@ -111,7 +111,7 @@ func Test_FibonacciHandler_GivenValidRequest_ShouldReturnContentTypeApplicationJ
 	}
 }
 
-func Test_FibonacciHandler_GivenInvalidRequest_ShouldReturnHttpStatus400(t *testing.T) {
+func Test_Handler_GivenInvalidRequest_ShouldReturnHttpStatus400(t *testing.T) {
 	urls := []string{
 		"",
 		"/",
@@ -135,7 +135,7 @@ func Test_FibonacciHandler_GivenInvalidRequest_ShouldReturnHttpStatus400(t *test
 		}
 
 		responseRecorder := httptest.NewRecorder()
-		handler := http.HandlerFunc(fibonacciHandler)
+		handler := http.HandlerFunc(Handler)
 
 		handler.ServeHTTP(responseRecorder, req)
 

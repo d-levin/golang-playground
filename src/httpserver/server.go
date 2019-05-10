@@ -1,9 +1,11 @@
 package httpserver
 
 import (
+	"fibonacci"
 	"log"
 	"net/http"
 	"strconv"
+	"todos"
 )
 
 type route struct {
@@ -13,7 +15,8 @@ type route struct {
 
 // Add new routes here
 var routes = []route{
-	{"/", http.HandlerFunc(fibonacciHandler)},
+	{"/", http.HandlerFunc(fibonacci.Handler)},
+	{"/todos/", http.HandlerFunc(todos.Handler)},
 }
 
 func Start(port int) {
